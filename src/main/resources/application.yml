@@ -1,0 +1,13 @@
+spring:
+  application:
+    name : tasks
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: root
+    hikari:
+      maximum-pool-size: 10
+
+mybatis:
+  mapper-locations: classpath*:/repository/*.xml # Tells mybatis to look in resources/mybatis for XML mappers
+  type-aliases-package: com.taskManager.tasks.model # Tells mybatis to look for our Client class in the right package
