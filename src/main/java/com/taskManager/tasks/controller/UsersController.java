@@ -4,9 +4,8 @@ import com.taskManager.tasks.model.Users;
 import com.taskManager.tasks.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,8 +23,14 @@ public class UsersController {
     }
 
     @GetMapping("/allUsers")
-    List<Users> getAllUsers(){
+    public List<Users> getAllUsers(){
         log.info("In Controller");
         return userService.getAllUsers();
+    }
+
+    @PostMapping("/register")
+    @ResponseStatus(code= HttpStatus.CREATED)
+    public void registerUser(@RequestBody Users user) {
+        userService.registerUser(user);
     }
 }

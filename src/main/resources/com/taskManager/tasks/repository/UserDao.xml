@@ -11,4 +11,9 @@
         SELECT * FROM USERS WHERE username=#{username}
     </select>
 
+    <insert id="registerUser" parameterType="com.taskManager.tasks.model.Users" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO USERS (USERNAME,FIRSTNAME,LASTNAME,PASS,EMAIL)
+        VALUES (#{username},#{firstname},#{lastname},#{pass},#{email})
+    </insert>
+
 </mapper>

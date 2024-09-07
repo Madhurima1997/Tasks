@@ -9,4 +9,6 @@ public interface UserDao {
     List<Users> getAllUser();
 
     Users getUserByUsername(String username);
+
+    public void registerUser(Users user);
 }

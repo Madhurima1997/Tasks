@@ -29,11 +29,12 @@ public class SecurityConfig {
 
         http
                 .authorizeExchange(authorize ->
-                        authorize.pathMatchers("/users/allUsers")
+                        authorize.pathMatchers("/users/register")
                                 .permitAll()
                                 .anyExchange()
                                 .authenticated()
                 );
+        http.csrf(csrf-> csrf.disable());
         AuthenticationWebFilter authenticationWebFilter = new AuthenticationWebFilter(customAuthenticationProvider);
 
         http.addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION);
