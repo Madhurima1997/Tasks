@@ -7,4 +7,8 @@
         FROM USERS
     </select>
 
+    <select id="getUserByUsername" resultType="Users" parameterType="java.lang.String">
+        SELECT * FROM USERS WHERE username=#{username}
+    </select>
+
 </mapper>

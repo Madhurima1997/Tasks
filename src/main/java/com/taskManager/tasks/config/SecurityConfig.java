@@ -1,23 +1,43 @@
 package com.taskManager.tasks.config;
 
+import com.taskManager.tasks.service.TaskUserDetailImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 
-@EnableWebSecurity
+@Configuration
+@EnableWebFluxSecurity
 public class SecurityConfig {
 
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic(Customizer.withDefaults());
-        return http.build();
+    private final TaskUserDetailImpl userDetailsService;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
 
+    @Autowired
+    public SecurityConfig(TaskUserDetailImpl userDetailsService, CustomAuthenticationProvider customAuthenticationProvider) {
+        this.userDetailsService = userDetailsService;
+        this.customAuthenticationProvider = customAuthenticationProvider;
+    }
+
+
+    @Bean
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+
+        http
+                .authorizeExchange(authorize ->
+                        authorize.pathMatchers("/users/allUsers")
+                                .permitAll()
+                                .anyExchange()
+                                .authenticated()
+                );
+        AuthenticationWebFilter authenticationWebFilter = new AuthenticationWebFilter(customAuthenticationProvider);
+
+        http.addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+
+        return http.build();
     }
 }
